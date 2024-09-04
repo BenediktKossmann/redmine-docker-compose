@@ -18,5 +18,5 @@ BACKUP_FILE=redmine_backup_2024-09-04_12-34-13.sql
 2. Dann führen Sie den folgenden Befehl aus, um die Datenbank wiederherzustellen
 
 ```bash
-docker-compose run db_restore
+docker-compose run --rm db_restore
 ```

@@ -8,16 +8,16 @@ services:
     ports:
       - "8010:3000"
     environment:
-      REDMINE_DB_MYSQL: db
-      REDMINE_DB_PASSWORD: example
-      REDMINE_SECRET_KEY_BASE: supersecretkey
+      REDMINE_DB_MYSQL: ${REDMINE_DB_MYSQL}
+      REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
+      REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
 
   db:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: redmine
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
 
   db_backup:
     image: mysql:8.0
@@ -25,8 +25,8 @@ services:
     volumes:
       - ./db_backups:/backups
     environment:
-      MYSQL_ROOT_PASSWORD: example
-    command: /bin/sh -c "while true; do mysqldump -h db -u root -pexample redmine > /backups/redmine_backup_$(date +%F_%H-%M-%S).sql; sleep 86400; done"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: /bin/sh -c "while true; do mysqldump -h db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} > /backups/redmine_backup_$(date +%F_%H-%M-%S).sql; sleep 86400; done"
     depends_on:
       - db
 
@@ -35,7 +35,7 @@ services:
     volumes:
       - ./db_backups:/backups
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     entrypoint:
       - /bin/sh
       - -c
@@ -48,6 +48,6 @@ services:
           echo "ERROR: Backup file not found";
           exit 1;
         fi;
-        mysql -h db -u root -pexample redmine < /backups/$BACKUP_FILE
+        mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /backups/$BACKUP_FILE
     depends_on:
       - db
