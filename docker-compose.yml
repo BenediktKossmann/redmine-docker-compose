@@ -6,7 +6,7 @@ services:
     image: redmine
     restart: always
     ports:
-      - 8010:3000
+      - "8010:3000"
     environment:
       REDMINE_DB_MYSQL: db
       REDMINE_DB_PASSWORD: example
@@ -36,6 +36,18 @@ services:
       - ./db_backups:/backups
     environment:
       MYSQL_ROOT_PASSWORD: example
-    entrypoint: /bin/sh -c "mysql -h db -u root -pexample redmine < /backups/${BACKUP_FILE}"
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        if [ -z "$BACKUP_FILE" ]; then
+          echo "ERROR: BACKUP_FILE is not set";
+          exit 1;
+        fi;
+        if [ ! -f "/backups/$BACKUP_FILE" ]; then
+          echo "ERROR: Backup file not found";
+          exit 1;
+        fi;
+        mysql -h db -u root -pexample redmine < /backups/$BACKUP_FILE
     depends_on:
       - db
