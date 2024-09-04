@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+
+  redmine:
+    image: redmine
+    restart: always
+    ports:
+      - 8010:3000
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_PASSWORD: example
+      REDMINE_SECRET_KEY_BASE: supersecretkey
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: redmine
+
+  db_backup:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./db_backups:/backups
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    command: /bin/sh -c "while true; do mysqldump -h db -u root -pexample redmine > /backups/redmine_backup_$(date +%F_%H-%M-%S).sql; sleep 86400; done"
+    depends_on:
+      - db
+
+  db_restore:
+    image: mysql:8.0
+    volumes:
+      - ./db_backups:/backups
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    entrypoint: /bin/sh -c "mysql -h db -u root -pexample redmine < /backups/${BACKUP_FILE}"
+    depends_on:
+      - db
