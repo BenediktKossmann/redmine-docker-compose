@@ -7,6 +7,7 @@ services:
     restart: always
     ports:
       - "8010:3000"
+      - "80:3000"
     environment:
       REDMINE_DB_MYSQL: ${REDMINE_DB_MYSQL}
       REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
