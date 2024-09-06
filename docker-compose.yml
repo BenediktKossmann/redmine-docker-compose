@@ -13,15 +13,17 @@ services:
       REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
       REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
     volumes:
-      - redmine_data:/usr/src/redmine/files       # Volume für Anhänge und andere Daten
-      - redmine_config:/usr/src/redmine/config    # Volume für Konfigurationen
-      
+      - redmine_data:/usr/src/redmine/files       
+      - redmine_config:/usr/src/redmine/config    
+
   db:
     image: mysql:8.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - db_data:/var/lib/mysql                    
 
   db_backup:
     image: mysql:8.0
@@ -55,3 +57,8 @@ services:
         mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /backups/$BACKUP_FILE
     depends_on:
       - db
+
+volumes:
+  redmine_data:
+  redmine_config:
+  db_data:
