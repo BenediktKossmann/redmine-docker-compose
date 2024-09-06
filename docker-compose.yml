@@ -12,7 +12,10 @@ services:
       REDMINE_DB_MYSQL: ${REDMINE_DB_MYSQL}
       REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
       REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
-
+    volumes:
+      - redmine_data:/usr/src/redmine/files       # Volume für Anhänge und andere Daten
+      - redmine_config:/usr/src/redmine/config    # Volume für Konfigurationen
+      
   db:
     image: mysql:8.0
     restart: always
