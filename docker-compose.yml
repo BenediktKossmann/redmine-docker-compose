@@ -12,11 +12,6 @@ services:
       REDMINE_DB_MYSQL: ${REDMINE_DB_MYSQL}
       REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
       REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
-    volumes:
-      - ./redmine/config:/usr/src/redmine/config
-      - ./redmine/files:/usr/src/redmine/files
-      - ./redmine/plugins:/usr/src/redmine/plugins
-      - ./redmine/log:/usr/src/redmine/log
 
   db:
     image: mysql:8.0
