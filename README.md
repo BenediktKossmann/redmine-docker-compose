@@ -20,3 +20,9 @@ BACKUP_FILE=redmine_backup_2024-09-04_12-34-13.sql
 ```bash
 docker-compose run --rm db_restore
 ```
+
+## Backup manuell ausführen
+
+```bash
+docker-compose run --rm db_backup
+```
