@@ -26,3 +26,21 @@ docker-compose run --rm db_restore
 ```bash
 docker-compose run --rm db_backup
 ```
+
+## E-Mail Einstellungen in /config/configuration.yml
+
+```bash
+# Email configuration
+production:
+  delivery_method: :smtp
+  smtp_settings:
+    address: "smtp.ettinger.local"
+    port: 25
+    domain: "ettinger.de"
+    openssl_verify_mode: 'none'
+
+attachments_storage_path: "/usr/src/redmine/files"
+max_attachment_size: 50
+gravatar:
+  enabled: true
+```
